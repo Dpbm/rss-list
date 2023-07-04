@@ -17,5 +17,17 @@ fn main() {
     
 
     println!("File Path: {}", &path.display());
-    println!("Channel: {}", &channel.to_string());
+    
+    println!("Title: {}", &channel.title);
+    println!("URL: {}", &channel.link);
+    println!("\nITEMS");
+ 
+    for item in &channel.items{
+
+        match &item.title{
+            Some(title) => println!("{}", title),
+            None => println!("!!!!!NO TITLE!!!!!")
+        }
+    
+    }
 }
