@@ -1,33 +1,47 @@
 use std::path;
-use std::fs::File;
-use std::io::BufReader;
+use std::fs;
 use rss::Channel;
 use clap::Parser;
+use std::error::Error;
 
 #[derive(Parser)]
 struct Cli {
-    path: path::PathBuf,
+    feed: path::PathBuf,
 }
 
-fn main() {
+
+#[tokio::main]
+async fn main() {
     let args = Cli::parse();
-    let path : path::PathBuf = args.path;
-    let rss_file = File::open(&path).expect("File not found!!");
-    let channel = Channel::read_from(BufReader::new(rss_file)).unwrap();
     
+    let feed: path::PathBuf = args.feed;
 
-    println!("File Path: {}", &path.display());
+    let feed_content = fs::read_to_string(&feed).expect("Feed File not found!!!");
+    let feed_list = feed_content.lines();
     
-    println!("Title: {}", &channel.title);
-    println!("URL: {}", &channel.link);
-    println!("\nITEMS");
- 
-    for item in &channel.items{
-
-        match &item.title{
-            Some(title) => println!("{}", title),
-            None => println!("!!!!!NO TITLE!!!!!")
+    for url in feed_list{
+        let result = get_rss(url.to_string()).await;
+        match result{
+            Ok(channel) => {
+                println!("{}",&channel.title);
+                for item in &channel.items{
+                    match &item.title{
+                        Some(item_title) => println!("-> {}", &item_title),
+                        None => println!("-> NULL")
+                    } 
+                }
+            }
+            Err(_) => println!("Error")
         }
-    
     }
+}
+
+async fn get_rss(url:String) -> Result<Channel, Box<dyn Error>> {
+    println!("getting from: {}",  url);
+    let content = reqwest::get(url)
+        .await?
+        .bytes()
+        .await?;
+    let channel = Channel::read_from(&content[..])?; 
+    Ok(channel)
 }
