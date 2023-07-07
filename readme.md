@@ -1,6 +1,10 @@
 # RSS List CLI
 list your feeds using a `rust` based CLI.
 
+
+https://github.com/Dpbm/rss-list/assets/75098594/44ed53a1-82e2-49db-bc9e-3b595b486a57
+
+
 ## Arguments
 
 | short | long | description |
