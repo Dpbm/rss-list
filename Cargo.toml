@@ -8,7 +8,7 @@ description = "List your rss feed using your terminal"
 readme = "readme.md"
 homepage = "https://github.com/Dpbm/rss-list"
 repository = "https://github.com/Dpbm/rss-list"
-keywords = ["cli", "search", "rss", "list", "util", "feed", "rss-feed"]
+keywords = ["cli", "rss", "list", "feed", "rss-feed"]
 categories = ["command-line-utilities"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
